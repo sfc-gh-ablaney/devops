@@ -1,0 +1,14 @@
+{% macro create_database(ENV, DATABASE_NAME) -%}
+
+{% set db_name = ENV + '_' + DATABASE_NAME %}
+
+CREATE DATABASE IF NOT EXISTS {{ db_name }};
+
+CREATE DATABASE role if not exists {{ db_name }}.DB_CR;
+CREATE DATABASE role if not exists {{ db_name }}.DB_RW;
+CREATE DATABASE role if not exists {{ db_name }}.DB_RO;
+
+grant database role {{ db_name }}.DB_RO  to database role {{ db_name }}.DB_RW;
+grant database role {{ db_name }}.DB_RW to database role {{ db_name }}.DB_CR;
+
+{% endmacro -%}

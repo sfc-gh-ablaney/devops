@@ -1,0 +1,13 @@
+config-version: 1
+
+# The root folder for the database change scripts
+# root-folder: 'migrations'
+
+# The modules folder for jinja macros and templates to be used across multiple scripts.
+modules-folder: migrations/modules
+
+# Display verbose debugging details during execution (the default is False)
+verbose: true
+
+# A string to include in the QUERY_TAG that is attached to every SQL statement executed
+query-tag: SCHEMACHANGE
