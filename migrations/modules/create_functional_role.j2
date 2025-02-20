@@ -1,0 +1,27 @@
+{% macro create_functional_role(ENV, ROLE_NAME, GRANT_LIST, WH_GRANT_LIST) -%}
+
+{% set role_name = ENV + '_' + ROLE_NAME %}
+
+CREATE ROLE IF NOT EXISTS {{ role_name }} ;
+
+GRANT ROLE {{ role_name }} TO ROLE SYSADMIN;
+
+{% for grant in GRANT_LIST %}
+  {% set db_name = ENV + '_' + grant["database"] %}
+  {% set schema = grant["schema"] %}
+  {% set access = grant["access"] %}
+
+  GRANT DATABASE ROLE  {{ db_name }}.{{schema}}_{{access}} TO ROLE {{ role_name }} ;
+
+{% endfor %}
+
+{% for wh in WH_GRANT_LIST %}
+  {% set wh_name = ENV + '_' + wh["warehouse"] +'_WH' %}
+  {% set grant = wh["grant"] %}
+
+
+  GRANT {{grant}} ON WAREHOUSE  {{ wh_name }} TO ROLE {{ role_name }} ;
+
+{% endfor %}
+
+{% endmacro -%}

@@ -1,0 +1,38 @@
+name: Clone DB on create branch
+
+on: create
+
+      
+jobs:
+  clone_database:
+    runs-on: ubuntu-latest
+
+
+    steps:
+
+      - name: Use Python 3.8.x
+        uses: actions/setup-python@v2.2.1
+        with:
+          python-version: 3.8.x
+
+      # - name: Clone Database
+      #   env: 
+      #     BRANCH_NAME: ${{github.ref}}
+      #     SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+      #     SNOWFLAKE_USER:  ${{ secrets.SNOWFLAKE_USER }}
+      #     SNOWFLAKE_ROLE: ${{ secrets.SNOWFLAKE_ROLE }}
+      #     SNOWFLAKE_WAREHOUSE:  ${{ secrets.SNOWFLAKE_WAREHOUSE }}
+      #     SNOWFLAKE_DATABASE: SCHEMACHANGE
+      #     SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
+      #     ENV:  ${{ vars.ENVIRONMENT }}
+      #   run: |
+      #     echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
+      #     python --version
+      #     echo "Step 1: Installing schemachange"
+      #     pip install schemachange==3.7.0
+
+      #     echo "ACCOUNT: $SNOWFLAKE_ACCOUNT"
+      #     echo "ENV: DEV "
+          
+      #     echo "Step 2: Running schemachange"
+      #     schemachange -f $GITHUB_WORKSPACE/migrations -a $SNOWFLAKE_ACCOUNT -u $SNOWFLAKE_USER -r $SNOWFLAKE_ROLE -w $SNOWFLAKE_WAREHOUSE -d $SNOWFLAKE_DATABASE -c $SNOWFLAKE_DATABASE.SCHEMACHANGE.CHANGE_HISTORY_DEV --create-change-history-table  --vars '{"ENV": "DEV"}'

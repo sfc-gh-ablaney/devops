@@ -1,0 +1,85 @@
+{% macro create_schema(ENV, DATABASE_NAME, SCHEMA_NAME) -%}
+
+{% set db_name = ENV + '_' + DATABASE_NAME %}
+{% set db_sch_name = ENV + '_' + DATABASE_NAME  + '.' + SCHEMA_NAME%}
+
+CREATE SCHEMA IF NOT EXISTS {{ db_sch_name }} WITH MANAGED ACCESS;
+
+CREATE DATABASE role if not exists {{ db_sch_name }}_SC_CR;
+CREATE DATABASE role if not exists {{ db_sch_name }}_SC_RW;
+CREATE DATABASE role if not exists {{ db_sch_name }}_SC_RO;
+
+grant database role {{ db_sch_name }}_SC_RO  to database role {{ db_sch_name }}_SC_RW;
+grant database role {{ db_sch_name }}_SC_RW to database role {{ db_sch_name }}_SC_CR;
+
+grant database role {{ db_sch_name }}_SC_RO  to database role {{ db_name }}.DB_RO;
+grant database role {{ db_sch_name }}_SC_RW to database role {{ db_name }}.DB_RW;
+grant database role {{ db_sch_name }}_SC_CR to database role {{ db_name }}.DB_CR;
+
+GRANT USAGE, MONITOR  ON DATABASE {{ db_name }}  TO DATABASE ROLE {{ db_sch_name }}_SC_RO;
+GRANT USAGE, MONITOR  ON SCHEMA {{ db_sch_name }}    TO DATABASE ROLE {{ db_sch_name }}_SC_RO;
+
+GRANT SELECT ON ALL TABLES                IN SCHEMA {{ db_sch_name }}   TO DATABASE ROLE {{ db_sch_name }}_SC_RO;
+GRANT SELECT ON FUTURE TABLES             IN SCHEMA {{ db_sch_name }}   TO DATABASE ROLE {{ db_sch_name }}_SC_RO;
+
+GRANT SELECT ON ALL VIEWS                 IN SCHEMA {{ db_sch_name }}   TO DATABASE ROLE {{ db_sch_name }}_SC_RO;
+GRANT SELECT ON FUTURE VIEWS              IN SCHEMA {{ db_sch_name }}   TO DATABASE ROLE {{ db_sch_name }}_SC_RO;
+
+GRANT USAGE  ON ALL FUNCTIONS             IN SCHEMA {{ db_sch_name }}   TO DATABASE ROLE {{ db_sch_name }}_SC_RO;
+GRANT USAGE  ON FUTURE FUNCTIONS          IN SCHEMA {{ db_sch_name }}   TO DATABASE ROLE {{ db_sch_name }}_SC_RO;
+
+GRANT SELECT ON ALL EXTERNAL TABLES       IN SCHEMA {{ db_sch_name }}   TO DATABASE ROLE {{ db_sch_name }}_SC_RO;
+GRANT SELECT ON FUTURE EXTERNAL TABLES    IN SCHEMA {{ db_sch_name }}   TO DATABASE ROLE {{ db_sch_name }}_SC_RO;
+
+GRANT SELECT ON ALL DYNAMIC TABLES        IN SCHEMA {{ db_sch_name }}   TO DATABASE ROLE {{ db_sch_name }}_SC_RO;
+GRANT SELECT ON FUTURE DYNAMIC TABLES     IN SCHEMA {{ db_sch_name }}   TO DATABASE ROLE {{ db_sch_name }}_SC_RO;
+
+GRANT SELECT ON ALL MATERIALIZED VIEWS    IN SCHEMA {{ db_sch_name }}   TO DATABASE ROLE {{ db_sch_name }}_SC_RO;
+GRANT SELECT ON FUTURE MATERIALIZED VIEWS IN SCHEMA {{ db_sch_name }}   TO DATABASE ROLE {{ db_sch_name }}_SC_RO;
+
+
+
+GRANT SELECT                            ON ALL STREAMS           IN SCHEMA {{ db_sch_name }}  TO DATABASE ROLE {{ db_sch_name }}_SC_RW;
+GRANT SELECT                            ON FUTURE STREAMS        IN SCHEMA {{ db_sch_name }}  TO DATABASE ROLE {{ db_sch_name }}_SC_RW;
+GRANT INSERT, UPDATE, DELETE, TRUNCATE  ON ALL TABLES            IN SCHEMA {{ db_sch_name }}  TO DATABASE ROLE {{ db_sch_name }}_SC_RW;
+GRANT INSERT, UPDATE, DELETE, TRUNCATE  ON FUTURE TABLES         IN SCHEMA {{ db_sch_name }}  TO DATABASE ROLE {{ db_sch_name }}_SC_RW;
+GRANT USAGE                             ON ALL PROCEDURES        IN SCHEMA {{ db_sch_name }}  TO DATABASE ROLE {{ db_sch_name }}_SC_RW;
+GRANT USAGE                             ON FUTURE PROCEDURES     IN SCHEMA {{ db_sch_name }}  TO DATABASE ROLE {{ db_sch_name }}_SC_RW;
+GRANT USAGE                             ON ALL SEQUENCES         IN SCHEMA {{ db_sch_name }}  TO DATABASE ROLE {{ db_sch_name }}_SC_RW;
+GRANT USAGE                             ON FUTURE SEQUENCES      IN SCHEMA {{ db_sch_name }}  TO DATABASE ROLE {{ db_sch_name }}_SC_RW;
+GRANT MONITOR, OPERATE                  ON ALL TASKS             IN SCHEMA {{ db_sch_name }}  TO DATABASE ROLE {{ db_sch_name }}_SC_RW;
+GRANT MONITOR, OPERATE                  ON FUTURE TASKS          IN SCHEMA {{ db_sch_name }}  TO DATABASE ROLE {{ db_sch_name }}_SC_RW;
+GRANT USAGE                             ON ALL FILE FORMATS      IN SCHEMA {{ db_sch_name }}  TO DATABASE ROLE {{ db_sch_name }}_SC_RW;
+GRANT USAGE                             ON FUTURE FILE FORMATS   IN SCHEMA {{ db_sch_name }}  TO DATABASE ROLE {{ db_sch_name }}_SC_RW;
+GRANT USAGE, READ, WRITE                ON ALL STAGES            IN SCHEMA {{ db_sch_name }}  TO DATABASE ROLE {{ db_sch_name }}_SC_RW;
+GRANT USAGE, READ, WRITE                ON FUTURE STAGES         IN SCHEMA {{ db_sch_name }}  TO DATABASE ROLE {{ db_sch_name }}_SC_RW;
+
+GRANT MONITOR, OPERATE                  ON ALL DYNAMIC TABLES    IN SCHEMA {{ db_sch_name }}  TO DATABASE ROLE {{ db_sch_name }}_SC_RW;
+GRANT MONITOR, OPERATE                  ON FUTURE DYNAMIC TABLES IN SCHEMA {{ db_sch_name }}  TO DATABASE ROLE {{ db_sch_name }}_SC_RW;
+GRANT MONITOR, OPERATE                  ON ALL ALERTS            IN SCHEMA {{ db_sch_name }}  TO DATABASE ROLE {{ db_sch_name }}_SC_RW;
+GRANT MONITOR, OPERATE                  ON FUTURE ALERTS         IN SCHEMA {{ db_sch_name }}  TO DATABASE ROLE {{ db_sch_name }}_SC_RW;
+
+
+
+GRANT CREATE TABLE             ON SCHEMA {{ db_sch_name }}  TO DATABASE ROLE {{ db_sch_name }}_SC_CR;
+GRANT CREATE VIEW              ON SCHEMA {{ db_sch_name }}  TO DATABASE ROLE {{ db_sch_name }}_SC_CR;
+GRANT CREATE STREAM            ON SCHEMA {{ db_sch_name }}  TO DATABASE ROLE {{ db_sch_name }}_SC_CR;
+GRANT CREATE FUNCTION          ON SCHEMA {{ db_sch_name }}  TO DATABASE ROLE {{ db_sch_name }}_SC_CR;
+GRANT CREATE PROCEDURE         ON SCHEMA {{ db_sch_name }}  TO DATABASE ROLE {{ db_sch_name }}_SC_CR;
+GRANT CREATE SEQUENCE          ON SCHEMA {{ db_sch_name }}  TO DATABASE ROLE {{ db_sch_name }}_SC_CR;
+GRANT CREATE TASK              ON SCHEMA {{ db_sch_name }}  TO DATABASE ROLE {{ db_sch_name }}_SC_CR;
+GRANT CREATE FILE FORMAT       ON SCHEMA {{ db_sch_name }}  TO DATABASE ROLE {{ db_sch_name }}_SC_CR;
+GRANT CREATE STAGE             ON SCHEMA {{ db_sch_name }}  TO DATABASE ROLE {{ db_sch_name }}_SC_CR;
+GRANT CREATE EXTERNAL TABLE    ON SCHEMA {{ db_sch_name }}  TO DATABASE ROLE {{ db_sch_name }}_SC_CR;
+GRANT CREATE PIPE              ON SCHEMA {{ db_sch_name }}  TO DATABASE ROLE {{ db_sch_name }}_SC_CR;
+GRANT CREATE DYNAMIC TABLE     ON SCHEMA {{ db_sch_name }}  TO DATABASE ROLE {{ db_sch_name }}_SC_CR;
+GRANT CREATE MATERIALIZED VIEW ON SCHEMA {{ db_sch_name }}  TO DATABASE ROLE {{ db_sch_name }}_SC_CR;
+GRANT CREATE STREAMLIT         ON SCHEMA {{ db_sch_name }}  TO DATABASE ROLE {{ db_sch_name }}_SC_CR;
+GRANT CREATE ALERT             ON SCHEMA {{ db_sch_name }}  TO DATABASE ROLE {{ db_sch_name }}_SC_CR;
+GRANT CREATE TAG               ON SCHEMA {{ db_sch_name }}  TO DATABASE ROLE {{ db_sch_name }}_SC_CR;
+GRANT CREATE MASKING POLICY    ON SCHEMA {{ db_sch_name }}  TO DATABASE ROLE {{ db_sch_name }}_SC_CR;
+GRANT CREATE ROW ACCESS POLICY ON SCHEMA {{ db_sch_name }}  TO DATABASE ROLE {{ db_sch_name }}_SC_CR;
+
+
+
+{% endmacro -%}
