@@ -31,6 +31,8 @@ jobs:
           ENV:  ${{ vars.ENVIRONMENT }}
           VARS: '{"ENV": "$ENV"}'
         run: |
+          echo "sc_vars={\"ENV\":\"${{ vars.ENVIRONMENT }}\"}" >> $GITHUB_ENV
+
           echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
           python --version
           echo "Step 1: Installing schemachange"
@@ -40,4 +42,4 @@ jobs:
           echo "ENV: DEV "
           
           echo "Step 2: Running schemachange"
-          schemachange -f $GITHUB_WORKSPACE/migrations -a $SNOWFLAKE_ACCOUNT -u $SNOWFLAKE_USER -r $SNOWFLAKE_ROLE -w $SNOWFLAKE_WAREHOUSE -d $SNOWFLAKE_DATABASE -c $SNOWFLAKE_DATABASE.SCHEMACHANGE.CHANGE_HISTORY_DEV --create-change-history-table  --vars '{"ENV": "$ENV"}'
+          schemachange -f $GITHUB_WORKSPACE/migrations -a $SNOWFLAKE_ACCOUNT -u $SNOWFLAKE_USER -r $SNOWFLAKE_ROLE -w $SNOWFLAKE_WAREHOUSE -d $SNOWFLAKE_DATABASE -c $SNOWFLAKE_DATABASE.SCHEMACHANGE.CHANGE_HISTORY_DEV --create-change-history-table  --vars $sc_vars
