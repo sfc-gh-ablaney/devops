@@ -29,7 +29,7 @@ jobs:
           SNOWFLAKE_DATABASE: SCHEMACHANGE
           SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
           ENV:  ${{ vars.ENVIRONMENT }}
-          VARS: '{"ENV": "${{github.ref}}_DEV"}'
+          VARS: '{"ENV": "$ENV"}'
         run: |
           echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
           python --version
