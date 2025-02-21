@@ -29,7 +29,7 @@ jobs:
           SNOWFLAKE_DATABASE: SCHEMACHANGE
           SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
           ENV:  ${{ vars.ENVIRONMENT }}
-          VARS: '{"ENV": "${{ vars.ENVIRONMENT }}"}'
+          VARS: '{"ENV": ${{ vars.ENVIRONMENT }}}'
         run: |
           echo "sc_vars={\"ENV\":\"${{ vars.ENVIRONMENT }}\"}" >> $GITHUB_ENV
           echo ${{ vars.ENVIRONMENT }}
@@ -43,4 +43,4 @@ jobs:
           echo "ENV: DEV "
           
           echo "Step 2: Running schemachange"
-          schemachange -f $GITHUB_WORKSPACE/migrations -a $SNOWFLAKE_ACCOUNT -u $SNOWFLAKE_USER -r $SNOWFLAKE_ROLE -w $SNOWFLAKE_WAREHOUSE -d $SNOWFLAKE_DATABASE -c $SNOWFLAKE_DATABASE.SCHEMACHANGE.CHANGE_HISTORY_DEV --create-change-history-table  --vars '{"ENV": ${{ vars.ENVIRONMENT }}}'
+          schemachange -f $GITHUB_WORKSPACE/migrations -a $SNOWFLAKE_ACCOUNT -u $SNOWFLAKE_USER -r $SNOWFLAKE_ROLE -w $SNOWFLAKE_WAREHOUSE -d $SNOWFLAKE_DATABASE -c $SNOWFLAKE_DATABASE.SCHEMACHANGE.CHANGE_HISTORY_DEV --create-change-history-table  --vars $VARS
