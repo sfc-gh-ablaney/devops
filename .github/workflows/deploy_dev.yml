@@ -28,9 +28,13 @@ jobs:
           SNOWFLAKE_WAREHOUSE:  ${{ secrets.SNOWFLAKE_WAREHOUSE }}
           SNOWFLAKE_DATABASE: SCHEMACHANGE
           SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
-          # ENV:  DEV
-          # VARS: '{"ENV": "DEV"}'
+          ENV:  DEV
+          VARS: '{"ENV": "DEV"}'
         run: |
+          echo "sc_vars={\"ENV\":\"DEV\"}" >> $GITHUB_ENV
+          echo ${{ vars.ENVIRONMENT }}
+          echo $VARS
+          echo "$GITHUB_CONTEXT"
 
           echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
           python --version
@@ -41,4 +45,4 @@ jobs:
           echo "ENV: DEV "
           
           echo "Step 2: Running schemachange"
-          schemachange -f $GITHUB_WORKSPACE/migrations -a $SNOWFLAKE_ACCOUNT -u $SNOWFLAKE_USER -r $SNOWFLAKE_ROLE -w $SNOWFLAKE_WAREHOUSE -d $SNOWFLAKE_DATABASE -c $SNOWFLAKE_DATABASE.SCHEMACHANGE.CHANGE_HISTORY_DEV --create-change-history-table  
+          schemachange -f $GITHUB_WORKSPACE/migrations -a $SNOWFLAKE_ACCOUNT -u $SNOWFLAKE_USER -r $SNOWFLAKE_ROLE -w $SNOWFLAKE_WAREHOUSE -d $SNOWFLAKE_DATABASE -c $SNOWFLAKE_DATABASE.SCHEMACHANGE.CHANGE_HISTORY_$ENV --create-change-history-table  --vars '{"ENV": "DEV"}'
