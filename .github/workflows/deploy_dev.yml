@@ -29,10 +29,11 @@ jobs:
           SNOWFLAKE_DATABASE: SCHEMACHANGE
           SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
           ENV:  DEV
+          ENV_VAR: ${{ vars.ENV }}
           VARS: '{"ENV": "DEV"}'
         run: |
           echo "sc_vars={\"ENV\":\"DEV\"}" >> $GITHUB_ENV
-          echo ${{ vars.ENVIRONMENT }}
+          echo ${{ vars.ENV }}
           echo $VARS
           echo "$GITHUB_CONTEXT"
 
