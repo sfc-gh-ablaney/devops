@@ -25,8 +25,8 @@ jobs:
           SNOWFLAKE_WAREHOUSE:  ${{ secrets.SNOWFLAKE_WAREHOUSE }}
           SNOWFLAKE_DATABASE: SCHEMACHANGE
           SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
-          ENV:  ${{ vars.ENV }}_${{github.ref}}
-          FEATURE_BRANCH: ${{github.ref}}
+          ENV:  ${{ vars.ENV }}_${{github.ref_name}}
+          FEATURE_BRANCH: ${{github.ref_name}}
 
  
         run: |
