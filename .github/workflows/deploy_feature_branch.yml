@@ -1,23 +1,27 @@
-name: Clone DB on create branch
+name: Deploy Snowflake Objects to dev
 
-on: create
-
+on:
+  # Trigger on push for the dev branch
+  push:
+    branches:
+      - feature_branch/*
       
 jobs:
-  clone_database:
+  deploy-snowflake-changes-job:
     runs-on: ubuntu-latest
-
+    environment: DEV
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Use Python 3.8.x
         uses: actions/setup-python@v2.2.1
         with:
           python-version: 3.8.x
 
-      # - name: Clone Database
-      #   env: 
-      #     BRANCH_NAME: ${{github.ref}}
+      # - name: Run schemachange
+      #   env:
       #     SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
       #     SNOWFLAKE_USER:  ${{ secrets.SNOWFLAKE_USER }}
       #     SNOWFLAKE_ROLE: ${{ secrets.SNOWFLAKE_ROLE }}
