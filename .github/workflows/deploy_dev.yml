@@ -28,7 +28,7 @@ jobs:
           SNOWFLAKE_WAREHOUSE:  ${{ secrets.SNOWFLAKE_WAREHOUSE }}
           SNOWFLAKE_DATABASE: SCHEMACHANGE
           SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
-          ENV:  ${{ env_var.ENVIRONMENT }}
+          ENV:  DEV
           VARS: '{"ENV": ${{ vars.ENVIRONMENT }}}'
         run: |
           echo "sc_vars={\"ENV\":\"${{ vars.ENVIRONMENT }}\"}" >> $GITHUB_ENV
