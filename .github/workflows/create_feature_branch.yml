@@ -6,6 +6,7 @@ on: create
 jobs:
   clone_database:
     runs-on: ubuntu-latest
+    environment: DEV
 
     steps:
       - name: Checkout repository
