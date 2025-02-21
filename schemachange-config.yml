@@ -13,4 +13,4 @@ verbose: true
 query-tag: SCHEMACHANGE
 
 vars:
-  ENV: ${{ vars.ENV }}
+  ENV: ${{ env_var.ENV }}
