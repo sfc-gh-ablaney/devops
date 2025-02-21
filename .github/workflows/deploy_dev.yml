@@ -33,7 +33,6 @@ jobs:
           VARS: '{"ENV": "DEV"}'
         run: |
           echo "sc_vars={\"ENV\":\"DEV\"}" >> $GITHUB_ENV
-          # echo ${{ vars.ENV }}
           echo $VARS
           echo "$GITHUB_CONTEXT"
 
