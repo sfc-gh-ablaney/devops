@@ -30,7 +30,7 @@ jobs:
           SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
           ENV:  ${{ vars.ENV }}
           # ENV_VAR: ${{ vars.ENV }}
-          VARS: '{"ENV": "$ENV"}'
+          VARS: '{"ENV": "${{ vars.ENV }}e"}'
         run: |
           echo "sc_vars={\"ENV\":\"DEV\"}" >> $GITHUB_ENV
           echo $VARS
