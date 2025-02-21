@@ -33,6 +33,8 @@ jobs:
         run: |
           echo "sc_vars={\"ENV\":\"${{ vars.ENVIRONMENT }}\"}" >> $GITHUB_ENV
           echo ${{ vars.ENVIRONMENT }}
+          echo $VARS
+          echo "$GITHUB_CONTEXT"
 
           echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
           python --version
