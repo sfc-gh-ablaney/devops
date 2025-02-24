@@ -1,6 +1,9 @@
 name: Clone DB on create branch
 
-on: create
+on: 
+  create:
+    branches:
+      - feature_*
 
       
 jobs:
