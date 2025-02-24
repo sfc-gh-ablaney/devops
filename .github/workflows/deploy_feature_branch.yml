@@ -4,7 +4,7 @@ on:
   # Trigger on push for the dev branch
   push:
     branches:
-      - feature_branch/*
+      - feature_*
       
 jobs:
   deploy-snowflake-changes-job:
@@ -20,23 +20,32 @@ jobs:
         with:
           python-version: 3.8.x
 
-      # - name: Run schemachange
-      #   env:
-      #     SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
-      #     SNOWFLAKE_USER:  ${{ secrets.SNOWFLAKE_USER }}
-      #     SNOWFLAKE_ROLE: ${{ secrets.SNOWFLAKE_ROLE }}
-      #     SNOWFLAKE_WAREHOUSE:  ${{ secrets.SNOWFLAKE_WAREHOUSE }}
-      #     SNOWFLAKE_DATABASE: SCHEMACHANGE
-      #     SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
-      #     ENV:  ${{ vars.ENVIRONMENT }}
-      #   run: |
-      #     echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
-      #     python --version
-      #     echo "Step 1: Installing schemachange"
-      #     pip install schemachange==3.7.0
+      - name: Run schemachange
+        env:
+          SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+          SNOWFLAKE_USER:  ${{ secrets.SNOWFLAKE_USER }}
+          SNOWFLAKE_ROLE: ${{ secrets.SNOWFLAKE_ROLE }}
+          SNOWFLAKE_WAREHOUSE:  ${{ secrets.SNOWFLAKE_WAREHOUSE }}
+          SNOWFLAKE_DATABASE: SCHEMACHANGE
+          SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
+          ENV:  ${{ vars.ENV }}_${{github.ref_name}}
+          FEATURE_BRANCH: ${{github.ref_name}}
 
-      #     echo "ACCOUNT: $SNOWFLAKE_ACCOUNT"
-      #     echo "ENV: DEV "
+
+        run: |
+          echo "****************"
+          echo "Variable check"
+          echo $ENV
+          echo "ACCOUNT: $SNOWFLAKE_ACCOUNT"
+
+
+          echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
+          python --version
+          echo "Step 1: Installing schemachange"
+          pip install schemachange==3.7.0
+
+          echo "ACCOUNT: $SNOWFLAKE_ACCOUNT"
+          echo "ENV: DEV "
           
-      #     echo "Step 2: Running schemachange"
-      #     schemachange -f $GITHUB_WORKSPACE/migrations -a $SNOWFLAKE_ACCOUNT -u $SNOWFLAKE_USER -r $SNOWFLAKE_ROLE -w $SNOWFLAKE_WAREHOUSE -d $SNOWFLAKE_DATABASE -c $SNOWFLAKE_DATABASE.SCHEMACHANGE.CHANGE_HISTORY_DEV --create-change-history-table  --vars '{"ENV": "DEV"}'
+          echo "Step 2: Running schemachange"
+          schemachange -f $GITHUB_WORKSPACE/migrations -a $SNOWFLAKE_ACCOUNT -u $SNOWFLAKE_USER -r $SNOWFLAKE_ROLE -w $SNOWFLAKE_WAREHOUSE -d $SNOWFLAKE_DATABASE -c $SNOWFLAKE_DATABASE.SCHEMACHANGE.CHANGE_HISTORY_$ENV --create-change-history-table 

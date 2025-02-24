@@ -11,3 +11,6 @@ verbose: true
 
 # A string to include in the QUERY_TAG that is attached to every SQL statement executed
 query-tag: SCHEMACHANGE
+
+vars:
+  ENV: "{{env_var('ENV')}}"
