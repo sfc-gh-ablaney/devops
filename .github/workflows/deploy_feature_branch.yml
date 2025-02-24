@@ -33,6 +33,12 @@ jobs:
 
 
         run: |
+          echo "****************"
+          echo "Variable check"
+          echo $ENV
+          echo "ACCOUNT: $SNOWFLAKE_ACCOUNT"
+
+
           echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
           python --version
           echo "Step 1: Installing schemachange"
