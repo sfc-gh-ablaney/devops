@@ -2,9 +2,9 @@ name: Deploy Snowflake Objects to dev
 
 on:
   # Trigger on push for the dev branch
-  pull_request:
-    paths:
-      - feature_*
+  push:
+    branches:
+      - ${{github.ref_name}}
       
 jobs:
   deploy-snowflake-changes-job:

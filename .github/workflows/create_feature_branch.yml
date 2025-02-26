@@ -1,9 +1,7 @@
 name: Clone DB on create branch
 
 on: 
-  pull_request:
-    paths:
-      - migrations/*
+  create:
 
       
 jobs:

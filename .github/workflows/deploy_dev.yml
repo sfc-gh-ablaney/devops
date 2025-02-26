@@ -22,11 +22,11 @@ jobs:
 
       # creating a dynamic file in from the private key stored in git secret and providing access only
       # to owner so chmod 600
-      - name: Decrypt RSA key
-        run: |
-          echo hello  > ./config/file.txt
-          echo "${{ secrets.SNOWFLAKE_PRIVATE_KEY }}"  > ${{ secrets.SNOWFLAKE_PRIVATE_KEY_PATH}}
-          chmod 600 ${{ secrets.SNOWFLAKE_PRIVATE_KEY_PATH}} 
+      # - name: Decrypt RSA key
+      #   run: |
+      #     echo hello  > ./config/file.txt
+      #     echo "${{ secrets.SNOWFLAKE_PRIVATE_KEY }}"  > ${{ secrets.SNOWFLAKE_PRIVATE_KEY_PATH}}
+      #     chmod 600 ${{ secrets.SNOWFLAKE_PRIVATE_KEY_PATH}} 
 
 
       - name: Run schemachange
@@ -36,11 +36,11 @@ jobs:
           SNOWFLAKE_ROLE: ${{ secrets.SNOWFLAKE_ROLE }}
           SNOWFLAKE_WAREHOUSE:  ${{ secrets.SNOWFLAKE_WAREHOUSE }}
           SNOWFLAKE_DATABASE: SCHEMACHANGE
-          # SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
+          SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
           ENV:  ${{ vars.ENV }}
 
-          SNOWFLAKE_PRIVATE_KEY_PATH: ${{ secrets.SNOWFLAKE_PRIVATE_KEY_PATH}}
-          SNOWFLAKE_PRIVATE_KEY_PASSPHRASE: ${{ secrets.SNOWFLAKE_PRIVATE_KEY_PASSPHRASE}}
+          # SNOWFLAKE_PRIVATE_KEY_PATH: ${{ secrets.SNOWFLAKE_PRIVATE_KEY_PATH}}
+          # SNOWFLAKE_PRIVATE_KEY_PASSPHRASE: ${{ secrets.SNOWFLAKE_PRIVATE_KEY_PASSPHRASE}}
  
         run: |
           echo "****************"
@@ -59,5 +59,5 @@ jobs:
           schemachange deploy -f $GITHUB_WORKSPACE/migrations -a $SNOWFLAKE_ACCOUNT -u $SNOWFLAKE_USER -r $SNOWFLAKE_ROLE -w $SNOWFLAKE_WAREHOUSE -d $SNOWFLAKE_DATABASE -c $SNOWFLAKE_DATABASE.SCHEMACHANGE.CHANGE_HISTORY_$ENV --create-change-history-table  
 
         # Remove the private key file after use    
-      - name: Clean up private key file
-        run: rm -f rsa_key.p8
+      # - name: Clean up private key file
+      #   run: rm -f rsa_key.p8
