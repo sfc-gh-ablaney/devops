@@ -20,6 +20,14 @@ jobs:
         with:
           python-version: 3.8.x
 
+      # creating a dynamic file in from the private key stored in git secret and providing access only
+      # to owner so chmod 600
+      - name: Decrypt RSA key
+        run: |
+          echo "${{ secrets.SNOWFLAKE_PRIVATE_KEY }}"  > ./config/rsa_key.p8
+          chmod 600 ./config/rsa_key.p8 
+
+
       - name: Run schemachange
         env:
           SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
@@ -27,8 +35,11 @@ jobs:
           SNOWFLAKE_ROLE: ${{ secrets.SNOWFLAKE_ROLE }}
           SNOWFLAKE_WAREHOUSE:  ${{ secrets.SNOWFLAKE_WAREHOUSE }}
           SNOWFLAKE_DATABASE: SCHEMACHANGE
-          SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
+          # SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
           ENV:  ${{ vars.ENV }}
+
+          SNOWFLAKE_PRIVATE_KEY_PATH: ${{ secrets.SNOWFLAKE_PRIVATE_KEY_PATH}}
+          SNOWFLAKE_PRIVATE_KEY_PASSPHRASE: ${{ secrets.SNOWFLAKE_PRIVATE_KEY_PASSPHRASE}}
  
         run: |
           echo "****************"
@@ -45,3 +56,7 @@ jobs:
           
           echo "Step 2: Running schemachange"
           schemachange deploy -f $GITHUB_WORKSPACE/migrations -a $SNOWFLAKE_ACCOUNT -u $SNOWFLAKE_USER -r $SNOWFLAKE_ROLE -w $SNOWFLAKE_WAREHOUSE -d $SNOWFLAKE_DATABASE -c $SNOWFLAKE_DATABASE.SCHEMACHANGE.CHANGE_HISTORY_$ENV --create-change-history-table  
+
+        # Remove the private key file after use    
+      - name: Clean up private key file
+        run: rm -f rsa_key.p8
