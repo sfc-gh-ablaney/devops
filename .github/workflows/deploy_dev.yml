@@ -24,9 +24,9 @@ jobs:
       # to owner so chmod 600
       - name: Decrypt RSA key
         run: |
-          echo "hellow"  > ./config/file.txt
+          echo hello  > ./config/file.txt
           echo "${{ secrets.SNOWFLAKE_PRIVATE_KEY }}"  > ${{ secrets.SNOWFLAKE_PRIVATE_KEY_PATH}}
-          chmod 600 ./config/rsa_key.p8 
+          chmod 600 ${{ secrets.SNOWFLAKE_PRIVATE_KEY_PATH}} 
 
 
       - name: Run schemachange
