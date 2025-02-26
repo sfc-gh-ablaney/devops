@@ -25,7 +25,7 @@ jobs:
       - name: Decrypt RSA key
         run: |
           echo "hellow"  > ./config/file.txt
-          echo "${{ secrets.SNOWFLAKE_PRIVATE_KEY }}"  > ./config/rsa_key.p8
+          echo "${{ secrets.SNOWFLAKE_PRIVATE_KEY }}"  > ${{ secrets.SNOWFLAKE_PRIVATE_KEY_PATH}}
           chmod 600 ./config/rsa_key.p8 
 
 
