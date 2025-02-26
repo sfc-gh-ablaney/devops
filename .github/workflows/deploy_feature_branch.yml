@@ -4,7 +4,7 @@ on:
   # Trigger on push for the dev branch
   push:
     branches:
-      - ${{github.ref_name}}
+      - ${{ github.head_ref || github.ref_name }}
       
 jobs:
   deploy-snowflake-changes-job:
