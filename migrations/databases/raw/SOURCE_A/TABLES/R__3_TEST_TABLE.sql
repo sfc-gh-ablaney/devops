@@ -9,14 +9,14 @@ CREATE OR ALTER TABLE TEST_TABLE
 );
 
 
-{% set tbl_dmf = 
-[   {   "database": "RAW",
-        "schema": "SOURCE_A",
-        "table": "TEST_TABLE",
-        {
-            "column": "ID",
-            "dmf": "NULL_COUNT"
-        }
-    } 
-]
-%}
+-- {% set tbl_dmf = 
+-- [   {   "database": "RAW",
+--         "schema": "SOURCE_A",
+--         "table": "TEST_TABLE",
+--         {
+--             "column": "ID",
+--             "dmf": "NULL_COUNT"
+--         }
+--     } 
+-- ]
+-- %}
