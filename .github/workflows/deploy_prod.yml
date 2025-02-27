@@ -2,7 +2,7 @@ name: Deploy Snowflake Objects to prod
 
 on:
   # Trigger on push for the dev branch
-  push:
+  pull_request:
     branches:
       - main
 
@@ -39,14 +39,12 @@ jobs:
           echo "****************"
           echo "Variable check"
           echo $ENV
+          echo "ACCOUNT: $SNOWFLAKE_ACCOUNT"
 
           echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
           python --version
           echo "Step 1: Installing schemachange"
           pip install schemachange==3.7.0
-
-          echo "ACCOUNT: $SNOWFLAKE_ACCOUNT"
-          echo "ENV: PRD "
           
           echo "Step 2: Running schemachange"
           schemachange -f $GITHUB_WORKSPACE/migrations -a $SNOWFLAKE_ACCOUNT -u $SNOWFLAKE_USER -r $SNOWFLAKE_ROLE -w $SNOWFLAKE_WAREHOUSE -d $SNOWFLAKE_DATABASE -c $SNOWFLAKE_DATABASE.SCHEMACHANGE.CHANGE_HISTORY --create-change-history-table  
