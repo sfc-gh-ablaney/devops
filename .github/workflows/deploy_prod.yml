@@ -1,22 +1,23 @@
 name: Deploy Snowflake Objects to prod
 
 on:
-  # Trigger on push for the dev branch
-  push:
+  pull_request:
+    types:
+      - closed
     branches:
       - main
 
-  # Trigger on pull request after merge is complete or request is closed
-  # pull_request:
-  #   branches:
-  #     - main
-      
 jobs:
-  deploy-snowflake-changes-job:
+  if_merged:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     environment: PROD
-
     steps:
+      - name: merged is true
+        run: |
+           echo The PR was merged
+        
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -34,19 +35,17 @@ jobs:
           SNOWFLAKE_DATABASE: SCHEMACHANGE
           SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
           ENV:  ${{ vars.ENV }}
- 
+
         run: |
           echo "****************"
           echo "Variable check"
           echo $ENV
+          echo "ACCOUNT: $SNOWFLAKE_ACCOUNT"
 
           echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
           python --version
           echo "Step 1: Installing schemachange"
           pip install schemachange==3.7.0
-
-          echo "ACCOUNT: $SNOWFLAKE_ACCOUNT"
-          echo "ENV: PRD "
           
           echo "Step 2: Running schemachange"
           schemachange -f $GITHUB_WORKSPACE/migrations -a $SNOWFLAKE_ACCOUNT -u $SNOWFLAKE_USER -r $SNOWFLAKE_ROLE -w $SNOWFLAKE_WAREHOUSE -d $SNOWFLAKE_DATABASE -c $SNOWFLAKE_DATABASE.SCHEMACHANGE.CHANGE_HISTORY --create-change-history-table  
