@@ -1,4 +1,4 @@
-name: Deploy Snowflake Objects to dev
+name: Deploy Snowflake Objects to dev feature branch
 
 on:
   # Trigger on push for the dev branch
