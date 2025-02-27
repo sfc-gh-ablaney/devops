@@ -1,17 +1,7 @@
 USE DATABASE {{ ENV }}_RAW;
 USE SCHEMA SOURCE_A;
 
--- {% set tbl_dmf = 
--- [   {   "database": "RAW",
---         "schema": "SOURCE_A",
---         "table": "TEST_TABLE",
---         {
---             "column": "ID",
---             "dmf": "NULL_COUNT"
---         }
---     } 
--- ]
--- %}
+
 
 CREATE OR ALTER TABLE TEST_TABLE
 (
