@@ -2,7 +2,7 @@ name: Deploy Snowflake Objects to dev
 
 on:
   # Trigger on push for the dev branch
-  push:
+  pull_request:
     branches:
       - dev
       
@@ -46,13 +46,12 @@ jobs:
           echo "****************"
           echo "Variable check"
           echo $ENV
+          echo "ACCOUNT: $SNOWFLAKE_ACCOUNT"
 
           echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
           python --version
           echo "Step 1: Installing schemachange"
           pip install schemachange==3.7.0
-
-          echo "ACCOUNT: $SNOWFLAKE_ACCOUNT"
 
           
           echo "Step 2: Running schemachange"
