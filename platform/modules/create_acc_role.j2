@@ -1,0 +1,16 @@
+{% macro create_acc_role( ROLE_NAME, ACC_ROLE_LIST) -%}
+
+{% set role_name =  ROLE_NAME %}
+
+CREATE ROLE IF NOT EXISTS {{ role_name }} ;
+
+GRANT ROLE {{ role_name }} TO ROLE SYSADMIN;
+
+
+{% for role_grant in ACC_ROLE_LIST %}
+
+  GRANT {{ grant["type"] }}  {{ grant["object"] }} ON ACCOUNT TO ROLE {{ role_name }} ;
+
+{% endfor %}
+
+{% endmacro -%}

@@ -27,4 +27,12 @@
 ]
 %}
 
-{{create_functional_role(ENV, 'TRANSFORMATION', grant_list, wh_grant_list)}}
+{% set db_role_list = 
+[   
+]
+%}
+
+
+
+
+{{create_functional_role(ENV, 'TRANSFORMATION', grant_list, wh_grant_list, db_role_list)}}

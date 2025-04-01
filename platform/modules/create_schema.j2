@@ -9,6 +9,8 @@ CREATE DATABASE role if not exists {{ db_sch_name }}_SC_CR;
 CREATE DATABASE role if not exists {{ db_sch_name }}_SC_RW;
 CREATE DATABASE role if not exists {{ db_sch_name }}_SC_RO;
 
+CREATE DATABASE role if not exists {{ db_sch_name }}_SC_GOV;
+
 grant database role {{ db_sch_name }}_SC_RO  to database role {{ db_sch_name }}_SC_RW;
 grant database role {{ db_sch_name }}_SC_RW to database role {{ db_sch_name }}_SC_CR;
 
@@ -80,6 +82,8 @@ GRANT CREATE TAG               ON SCHEMA {{ db_sch_name }}  TO DATABASE ROLE {{ 
 GRANT CREATE MASKING POLICY    ON SCHEMA {{ db_sch_name }}  TO DATABASE ROLE {{ db_sch_name }}_SC_CR;
 GRANT CREATE ROW ACCESS POLICY ON SCHEMA {{ db_sch_name }}  TO DATABASE ROLE {{ db_sch_name }}_SC_CR;
 
+
+GRANT CREATE DATA METRIC FUNCTION ON SCHEMA {{ db_sch_name }}  TO DATABASE ROLE {{ db_sch_name }}_SC_GOV;
 
 
 {% endmacro -%}
