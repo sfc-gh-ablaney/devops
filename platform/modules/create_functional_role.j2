@@ -25,7 +25,7 @@ GRANT ROLE {{ role_name }} TO ROLE SYSADMIN;
 
 {% for role_grant in DB_ROLE_GRANT_LIST %}
 
-  GRANT {{ role_grant["type"] }}  ROLE  {{ role_grant["db_role_name"] }} TO ROLE {{ role_name }} ;
+  GRANT {{ role_grant["type"] }}  ROLE  {{ role_grant["role_name"] }} TO ROLE {{ role_name }} ;
 
 {% endfor %}
 
