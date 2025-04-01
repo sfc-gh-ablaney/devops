@@ -18,15 +18,16 @@
 %}
 
 {% set db_role_list = 
-[   {"type": "DATABASE",
-    "role_name": "SNOWFLAKE.DATA_METRIC_USER"
-    } ,
-    {"type": "DATABASE",
-    "role_name": "SNOWFLAKE.USAGE_VIEWER"
-    } ,
-    {"type": "APPLICATION",
-    "role_name": "SNOWFLAKE.DATA_QUALITY_MONITORING_VIEWER "
-    } 
+[   
+    -- {"type": "DATABASE",
+    -- "role_name": "SNOWFLAKE.DATA_METRIC_USER"
+    -- } ,
+    -- {"type": "DATABASE",
+    -- "role_name": "SNOWFLAKE.USAGE_VIEWER"
+    -- } ,
+    -- {"type": "APPLICATION",
+    -- "role_name": "SNOWFLAKE.DATA_QUALITY_MONITORING_VIEWER "
+    -- } 
 ]
 %}
 
