@@ -6,20 +6,16 @@ on:
       - closed
     branches:
       - dev
-  # push:
-  #   branches:
-  #     - dev
-      
+  push:
+    branches:
+      - dev
+
 jobs:
-  if_merged:
-    if: github.event.pull_request.merged == true
+  deploy-snowflake-changes-job:
     runs-on: ubuntu-latest
     environment: DEV
-    steps:
-      - name: merged is true
-        run: |
-           echo The PR was merged
 
+    steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -27,15 +23,6 @@ jobs:
         uses: actions/setup-python@v2.2.1
         with:
           python-version: 3.8.x
-
-      # creating a dynamic file in from the private key stored in git secret and providing access only
-      # to owner so chmod 600
-      # - name: Decrypt RSA key
-      #   run: |
-      #     echo hello  > ./config/file.txt
-      #     echo "${{ secrets.SNOWFLAKE_PRIVATE_KEY }}"  > ${{ secrets.SNOWFLAKE_PRIVATE_KEY_PATH}}
-      #     chmod 600 ${{ secrets.SNOWFLAKE_PRIVATE_KEY_PATH}} 
-
 
       - name: Run schemachange
         env:
@@ -46,15 +33,15 @@ jobs:
           SNOWFLAKE_DATABASE: SCHEMACHANGE
           SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
           ENV:  ${{ vars.ENV }}
+          FEATURE_BRANCH: ${{github.ref_name}}
 
-          # SNOWFLAKE_PRIVATE_KEY_PATH: ${{ secrets.SNOWFLAKE_PRIVATE_KEY_PATH}}
-          # SNOWFLAKE_PRIVATE_KEY_PASSPHRASE: ${{ secrets.SNOWFLAKE_PRIVATE_KEY_PASSPHRASE}}
- 
+
         run: |
           echo "****************"
           echo "Variable check"
           echo $ENV
           echo "ACCOUNT: $SNOWFLAKE_ACCOUNT"
+
 
           echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
           python --version
@@ -63,8 +50,66 @@ jobs:
 
           
           echo "Step 2: Running schemachange"
-          schemachange deploy -f $GITHUB_WORKSPACE/platform -a $SNOWFLAKE_ACCOUNT -u $SNOWFLAKE_USER -r $SNOWFLAKE_ROLE -w $SNOWFLAKE_WAREHOUSE -d $SNOWFLAKE_DATABASE -c $SNOWFLAKE_DATABASE.SCHEMACHANGE.CHANGE_HISTORY_$ENV --create-change-history-table  
+          schemachange -f $GITHUB_WORKSPACE/platform -a $SNOWFLAKE_ACCOUNT -u $SNOWFLAKE_USER -r $SNOWFLAKE_ROLE -w $SNOWFLAKE_WAREHOUSE -d $SNOWFLAKE_DATABASE -c $SNOWFLAKE_DATABASE.SCHEMACHANGE.CHANGE_HISTORY_$ENV --create-change-history-table 
 
-        # Remove the private key file after use    
-      # - name: Clean up private key file
-      #   run: rm -f rsa_key.p8
+      
+
+
+# jobs:
+#   if_merged:
+#     if: github.event.pull_request.merged == true
+#     runs-on: ubuntu-latest
+#     environment: DEV
+#     steps:
+#       - name: merged is true
+#         run: |
+#            echo The PR was merged
+
+#       - name: Checkout repository
+#         uses: actions/checkout@v4
+
+#       - name: Use Python 3.8.x
+#         uses: actions/setup-python@v2.2.1
+#         with:
+#           python-version: 3.8.x
+
+#       # creating a dynamic file in from the private key stored in git secret and providing access only
+#       # to owner so chmod 600
+#       # - name: Decrypt RSA key
+#       #   run: |
+#       #     echo hello  > ./config/file.txt
+#       #     echo "${{ secrets.SNOWFLAKE_PRIVATE_KEY }}"  > ${{ secrets.SNOWFLAKE_PRIVATE_KEY_PATH}}
+#       #     chmod 600 ${{ secrets.SNOWFLAKE_PRIVATE_KEY_PATH}} 
+
+
+#       - name: Run schemachange
+#         env:
+#           SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+#           SNOWFLAKE_USER:  ${{ secrets.SNOWFLAKE_USER }}
+#           SNOWFLAKE_ROLE: ${{ secrets.SNOWFLAKE_ROLE }}
+#           SNOWFLAKE_WAREHOUSE:  ${{ secrets.SNOWFLAKE_WAREHOUSE }}
+#           SNOWFLAKE_DATABASE: SCHEMACHANGE
+#           SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
+#           ENV:  ${{ vars.ENV }}
+
+#           # SNOWFLAKE_PRIVATE_KEY_PATH: ${{ secrets.SNOWFLAKE_PRIVATE_KEY_PATH}}
+#           # SNOWFLAKE_PRIVATE_KEY_PASSPHRASE: ${{ secrets.SNOWFLAKE_PRIVATE_KEY_PASSPHRASE}}
+ 
+#         run: |
+#           echo "****************"
+#           echo "Variable check"
+#           echo $ENV
+#           echo "ACCOUNT: $SNOWFLAKE_ACCOUNT"
+
+#           echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
+#           python --version
+#           echo "Step 1: Installing schemachange"
+#           pip install schemachange==3.7.0
+
+          
+#           echo "Step 2: Running schemachange"
+#           schemachange deploy -f $GITHUB_WORKSPACE/platform -a $SNOWFLAKE_ACCOUNT -u $SNOWFLAKE_USER -r $SNOWFLAKE_ROLE -w $SNOWFLAKE_WAREHOUSE -d $SNOWFLAKE_DATABASE -c $SNOWFLAKE_DATABASE.SCHEMACHANGE.CHANGE_HISTORY_$ENV --create-change-history-table  
+
+#         # Remove the private key file after use    
+#       # - name: Clean up private key file
+#       #   run: rm -f rsa_key.p8
