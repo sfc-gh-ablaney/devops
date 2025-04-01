@@ -32,7 +32,7 @@ jobs:
           SNOWFLAKE_WAREHOUSE:  ${{ secrets.SNOWFLAKE_WAREHOUSE }}
           SNOWFLAKE_DATABASE: SCHEMACHANGE
           SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
-          ENV:  ${{ vars.ENV }}_${{github.ref_name}}
+          ENV:  ${{ vars.ENV }}
           FEATURE_BRANCH: ${{github.ref_name}}
 
 
