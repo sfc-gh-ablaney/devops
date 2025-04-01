@@ -9,7 +9,7 @@ GRANT ROLE {{ role_name }} TO ROLE SYSADMIN;
 
 {% for role_grant in ACC_ROLE_LIST %}
 
-  GRANT {{ grant["type"] }}  {{ grant["object"] }} ON ACCOUNT TO ROLE {{ role_name }} ;
+  GRANT {{ role_grant["type"] }}  {{ role_grant["object"] }} ON ACCOUNT TO ROLE {{ role_name }} ;
 
 {% endfor %}
 
