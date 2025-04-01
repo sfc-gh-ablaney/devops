@@ -4,7 +4,7 @@ config-version: 1
 # root-folder: 'migrations'
 
 # The modules folder for jinja macros and templates to be used across multiple scripts.
-modules-folder: migrations/modules
+modules-folder: platform/modules
 
 # Display verbose debugging details during execution (the default is False)
 verbose: true
