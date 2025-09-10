@@ -1,4 +1,0 @@
-snowflake-snowpark-python
-snowflake-connector-python
-streamlit==1.39
-
